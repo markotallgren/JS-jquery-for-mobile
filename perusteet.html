@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' ws://10.3.124.233:3000 http://10.3.124.233:3000 http://code.jquery.com https://code.jquery.com https://ssl.gstatic.com data: gap:" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+	<script src="https://code.jquery.com/jquery-2.1.4.js" integrity="sha256-siFczlgw4jULnUICcdm9gjQPZkw/YPDqhQ9+nAOScE4=" crossorigin="anonymous"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+
+<body>
+
+	<div data-role="page" id="etusivu">
+		<div data-role="header">
+			<h1>Etusivu</h1>
+		</div>
+		<!-- /header -->
+		
+		<div role="main" class="ui-content ui-body-a">
+			<ul data-role="listview">
+				<li><a href="#painikkeetSivu">Painikkeet ja linkit</a></li>
+				<li><a href="#listaSivu">Listview</a></li>
+				<li><a href="#popSivu">Popup</a></li>
+				<li><a href="#panelSivu">Panel</a></li>
+				<li><a href="#menuSivu">Menu</a></li>
+			</ul>
+		</div>
+		<!-- /content -->
+		
+		<div data-role="footer">
+			<h4>Mobiiliohjelmointi</h4>
+		</div>
+		<!-- /footer -->
+		
+	</div>
+	<!-- /page -->
+	
+	<div data-role="page" id="painikkeetSivu">
+		<div data-role="header">
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-inline ui-btn-icon-notext ui-corner-all">Etsivulle</a>
+			<h1>Painikkeet ja linkit</h1>
+		</div>
+		<!-- /header -->
+		
+		<div role="main" class="ui-content ui-body-a">
+			<h3>Perus</h3>
+			<a href="#etusivu" class="ui-btn">Etusivulle</a>
+			<a href="#" class="ui-btn" data-rel="back">Takaisin</a>
+			
+			<h3>Inline</h3>
+			<a href="#etusivu" class="ui-btn ui-btn-inline">Etusivulle</a>
+			<a href="#" class="ui-btn ui-btn-inline" data-rel="back">Takaisin</a>
+			
+			<h3>Pyörristetty painike</h3>
+			<button class="ui-btn ui-corner-all ui-btn-inline">Painike</button>
+			
+			<h3>Ikonilla</h3>
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-icon-left ui-btn-inline ui-corner-all">Etsivulle</a>
+			<button class="ui-btn ui-icon-check ui-btn-icon-left ui-btn-inline ui-corner-all">OK</button>
+			
+			<h3>Ei tekstiä</h3>
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-inline ui-btn-icon-notext">Etsivulle</a>
+			<button class="ui-btn ui-icon-check ui-btn-inline ui-btn-icon-notext">OK</button>
+			
+			<h3>Ei kehystä</h3>
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-inline ui-btn-icon-notext ui-corner-all">Etsivulle</a>
+			<button class="ui-btn ui-icon-check ui-btn-inline ui-btn-icon-notext ui-corner-all">OK</button>
+			
+		</div>
+		<!-- /content -->
+		
+		<div data-role="footer">
+			<h4>Mobiiliohjelmointi</h4>
+		</div>
+		<!-- /footer -->
+		
+	</div>
+	<!-- /page -->
+	
+	<div data-role="page" id="listaSivu">
+		<div data-role="header">
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-inline ui-btn-icon-notext ui-corner-all">Etsivulle</a>
+			<h1>Listview</h1>
+		</div>
+		<!-- /header -->
+		
+		<div role="main" class="ui-content ui-body-a">
+		<h3>Filterillä, pyöristetyt reunat</h3>
+		<ul data-role="listview" data-filter="true" data-inset="true">
+			<li><a href="#">Rivi 1</a></li>
+			<li><a href="#">Rivi 2</a></li>
+			<li><a href="#">Rivi 3</a></li>
+			<li><a href="#">Rivi 4</a></li>
+		</ul>
+		
+		<h3>Kuvilla</h3>
+		<ul data-role="listview" data-inset="true">
+			<li data-icon="delete"><a href="#">Rivi 1</a></li>
+			<li data-icon="gear"><a href="#">Rivi 2</a></li>
+			<li data-icon="info"><a href="#">Rivi 3</a></li>
+			<li data-icon="home"><a href="#">Rivi 4</a></li>
+		</ul>
+		
+		<h3>Erottimilla, ei pyörristetty</h3>
+		<ul data-role="listview" data-divider-theme="a">
+			<li data-role="list-divider">Materiaali</li>
+			<li><a href="#">Perusteet</a></li>
+			<li><a href="#">JQyery</a></li>
+			<li data-role="list-divider">Tehtävät</li>
+			<li><a href="#">Osa 1</a></li>
+			<li><a href="#">Osa 2</a></li>
+		</ul>
+		
+		<h3>Avattava, ei pyörristetty</h3>
+		
+		<div data-role="collapsibleset" data-theme="a" data-inset="false">
+			<div data-role="collapsible">
+				<h2>Materiaalit</h2>
+				<ul data-role="listview">
+					<li><a href="#">Perusteet</a></li>
+					<li><a href="#">JQuery</a></li>
+				</ul>
+			</div>
+			<div data-role="collapsible">
+				<h2>Tehtävät</h2>
+				<ul data-role="listview">
+					<li><a href="#">Osa 1</a></li>
+					<li><a href="#">Osa 2</a></li>
+				</ul>
+			</div>
+			<div data-role="collapsible">
+				<h2>Muuta</h2>
+				<p>Kursi suoritetaan kaksi osaisella harjoitustyöllä</p>
+			</div>
+		</div>
+	
+		<h3>Pyörristettynä</h3>
+		
+		<div data-role="collapsibleset" data-theme="a" data-inset="true">
+			<div data-role="collapsible">
+				<h2>Materiaalit</h2>
+				<ul data-role="listview">
+					<li><a href="#">Perusteet</a></li>
+					<li><a href="#">JQuery</a></li>
+				</ul>
+			</div>
+			<div data-role="collapsible">
+				<h2>Tehtävät</h2>
+				<ul data-role="listview">
+					<li><a href="#">Osa 1</a></li>
+					<li><a href="#">Osa 2</a></li>
+				</ul>
+			</div>
+			<div data-role="collapsible">
+				<h2>Muuta</h2>
+				<p>Kursi suoritetaan kaksi osaisella harjoitustyöllä</p>
+			</div>
+		</div>
+		
+		</div>
+		<!-- /content -->
+		
+		<div data-role="footer">
+			<h4>Mobiiliohjelmointi</h4>
+		</div>
+		<!-- /footer -->
+		
+	</div>
+	<!-- /page -->
+	
+	<div data-role="page" id="popSivu">
+		<div data-role="header">
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-inline ui-btn-icon-notext ui-corner-all">Etsivulle</a>
+			<h1>Pop up</h1>
+		</div>
+		<!-- /header -->
+		
+		<div role="main" class="ui-content ui-body-a">
+		<h3>Perus</h3>
+			<a href="#popupBasic" data-rel="popup" class="ui-btn ui-corner-all ui-btn-inline" data-transition="slide">Tietoja</a>
+			
+			<div data-role="popup" id="popupBasic">
+				<p>JQuery Mobilella tehdään käyttöliittymä</p>
+			</div>
+		
+			<h3>Kuvalla</h3>
+			<a href="#popupInfo" data-rel="popup" data-transition="pop" class="ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-alert ui-btn-icon-notext">Varoitus</a>
+		
+			<div data-role="popup" id="popupInfo" class="ui-content" data-theme="a">
+			  <p>Tiellä jäätä</p>
+			</div>
+			
+			<h3>Nuolella</h3>
+			<a href="#popupNuoli" data-rel="popup" data-transition="pop" class="ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-alert ui-btn-icon-notext">Varoitus</a>
+		
+			<div data-role="popup" id="popupNuoli" class="ui-content" data-theme="a" data-arrow="true">
+			  <p>Tiellä jäätä</p>
+			</div>
+		
+		</div>
+		<!-- /content -->
+		
+		<div data-role="footer">
+			<h4>Mobiiliohjelmointi</h4>
+		</div>
+		<!-- /footer -->
+		
+	</div>
+	<!-- /page -->
+	
+	<div data-role="page" id="panelSivu">
+	
+		<div data-role="panel" id="mypanel" data-display="overlay">
+			Panel tulee esiin joko vasemmalta tai oikealta. Sopii hyvun valikkojen tekoon.
+			<button data-rel="close" class="ui-btn ui-corner-all ui-btn-inline ui-icon-delete ui-btn-icon-right">Sulje</button>
+		</div><!-- /panel -->
+	
+		<div data-role="header">
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-inline ui-btn-icon-notext ui-corner-all">Etsivulle</a>
+			<h1>Panel</h1>
+		</div>
+		<!-- /header -->
+		
+		<div role="main" class="ui-content ui-body-a">
+			<a href="#mypanel" class="ui-btn ui-btn-inline ui-corner-all">Näytä panel</a>
+		</div>
+		<!-- /content -->
+		
+		<div data-role="footer">
+			<h4>Mobiiliohjelmointi</h4>
+		</div>
+		<!-- /footer -->
+		
+	</div>
+	<!-- /page -->
+	
+	<div data-role="page">
+		<div data-role="header">
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-inline ui-btn-icon-notext ui-corner-all">Etsivulle</a>
+			<h1>Otsikko</h1>
+		</div>
+		<!-- /header -->
+		
+		<div role="main" class="ui-content ui-body-a">
+			<p>
+			Sivupohja
+			</p>
+		</div>
+		<!-- /content -->
+		
+		<div data-role="footer">
+			<h4>Mobiiliohjelmointi</h4>
+		</div>
+		<!-- /footer -->
+		
+	</div>
+	<!-- /page -->
+	
+	<div data-role="page" id="menuSivu">
+	
+		<div data-role="panel" id="panelMenu" data-display="overlay">
+			<ul data-role="listview">
+				<li><a href="#painikkeetSivu">Painikkeet ja linkit</a></li>
+				<li><a href="#listaSivu">Listview</a></li>
+				<li><a href="#popSivu">Popup</a></li>
+				<li><a href="#panelSivu">Panel</a></li>
+				<li><a href="#menuSivu">Menu</a></li>
+			</ul>		
+		</div><!-- /panel -->
+		
+		
+		<div data-role="header">
+			<a href="#popupMenu" data-rel="popup" class="ui-btn ui-icon-bullets ui-btn-inline ui-btn-icon-notext ui-corner-all" data-transition="pop">Valikko</a>
+			<a href="#etusivu" class="ui-btn ui-icon-home ui-btn-inline ui-btn-icon-notext ui-corner-all">Etsivulle</a>
+			<h1>Valikko</h1>
+		</div>
+		<!-- /header -->
+		
+		<div role="main" class="ui-content ui-body-a">
+			<a href="#panelMenu" class="ui-btn ui-icon-bullets ui-btn-inline ui-btn-icon-notext ui-corner-all">Valikko</a>
+			<div data-role="popup" id="popupMenu">
+				<a href="#" data-rel="back" class="ui-btn ui-btn-inline ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-right">Sulje</a>
+				<ul data-role="listview">
+					<li><a href="#painikkeetSivu" data-icon="grid">Painikkeet ja linkit</a></li>
+					<li><a href="#listaSivu">Listview</a></li>
+					<li><a href="#popSivu">Popup</a></li>
+					<li><a href="#panelSivu">Panel</a></li>
+					<li><a href="#menuSivu">Menu</a></li>
+				</ul>			
+			</div>
+		</div>
+		<!-- /content -->
+		
+		<div data-role="footer">
+			<div data-role="navbar" data-iconpos="bottom">
+				<ul>
+					<li><a href="#painikkeetSivu" data-icon="grid">Painikkeet ja linkit</a></li>
+					<li><a href="#listaSivu" data-icon="star">Listview</a></li>
+					<li><a href="#popSivu" data-icon="gear">Popup</a></li>
+					<li><a href="#panelSivu" data-icon="info">Panel</a></li>
+					<li><a href="#menuSivu" data-icon="home">Menu</a></li>
+				</ul>
+			</div><!-- /navbar -->
+			<h4>Mobiiliohjelmointi</h4>
+		</div>
+		<!-- /footer -->
+		
+	</div>
+	<!-- /page -->
+
+<!--
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+-->
+    <script type="text/javascript">
+        
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+
+    <meta http-equiv="Content-Security-Policy" content="
+		default-src 'self' 'unsafe-inline' http://192.168.1.38:3000/ ws://192.168.1.38:3000/ http://code.jquery.com https://code.jquery.com http://cdn.jtsage.com http://ajax.aspnetcdn.com https://maps.googleapis.com https://csi.gstatic.com https://maps.gstatic.com https://fonts.googleapis.com https://fonts.gstatic.com https://khms1.googleapis.com/ https://khms0.googleapis.com https://ssl.gstatic.com http://myy.haaga-helia.fi http://api.openweathermap.org http://www.amica.fi gap: data: blob: filesystem: ; 
+	" />
+
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+    <script src="https://code.jquery.com/jquery-2.1.4.js" integrity="sha256-siFczlgw4jULnUICcdm9gjQPZkw/YPDqhQ9+nAOScE4=" crossorigin="anonymous"></script>
+
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <link href="http://cdn.jtsage.com/jtsage-datebox/4.1.1/jtsage-datebox-4.1.1.jqm.min.css" rel="stylesheet" type="text/css">
+    <script src="http://cdn.jtsage.com/jtsage-datebox/4.1.1/jtsage-datebox-4.1.1.jqm.min.js" type="text/javascript"></script>
+    <script src="http://cdn.jtsage.com/jtsage-datebox/i18n/jtsage-datebox.i18n.fi.utf8.min.js" type="text/javascript"></script>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/icon-pack-custom.css" />
+
+    <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+    <!-- <link rel="stylesheet" href="css/themes/mobiili.css" /> -->
+
+    <style type="text/css">
+        .virhe {
+            color: red;
+            font-size: 130%;
+        }
+        
+        input.kenttaVirhe,
+        textarea.kenttaVirhe {
+            border: 1px solid red !important;
+        }
+        
+        #map {
+            height: 100%;
+        }
+    </style>
+
+    <title>Treenipäiväkirja</title>
+</head>
+
+<body>
+    <div data-role="popup" id="popupMenu" data-transition="pop" data-theme="a">
+        <a href="#" data-rel="back" class="ui-btn ui-btn-inline ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-right">Sulje</a>
+
+        <ul data-role="listview">
+            <li><a href="#etusivu" class="ui-btn">Etusivu</a></li>
+            <li><a href="#luoUusi" class="ui-btn">Luo uusi harjoitus</a></li>
+            <li><a href="#muokkaa" class="ui-btn">Tarkastele treeniohjelmaa</a></li>
+            <li><a href="#etsiSali" class="ui-btn">Löydä treenipaikka</a></li>
+        </ul>
+    </div>
+
+    <!-- Vain dynaamiset header ja footer ominaisuudella data-position="fixed" pysyvät paikallaan vilkkumatta, kun sivua vaihdetaan -->
+    <div data-role="header" data-theme="a" data-position="fixed">
+        <div style="float: left">
+            <a href="#popupMenu" data-rel="popup" data-transition="flip" class="ui-btn ui-btn-inline  ui-corner-all ui-icon-bars ui-btn-icon-notext">Menu</a>
+        </div>
+        <div style="margin: .5em 0">
+            <h1></h1>
+        </div>
+        <div data-role="navbar" id="navi">
+            <ul>
+                <li><a href="#etusivu" class="ui-btn ui-icon-home ui-btn-icon-top  ui-mini">Etusivu</a></li>
+                <li><a href="#luoUusi" class="ui-btn ui-icon-plus ui-btn-icon-top ui-mini">Luo uusi harjoitus</a></li>
+                <li><a href="#muokkaa" class="ui-btn ui-icon-star ui-btn-icon-top ui-mini">Tarkastele treeniohjelmaa</a></li>
+                <li><a href="#etsiSali" class="ui-btn ui-icon-search ui-btn-icon-top ui-mini">Löydä treenipaikka</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div data-role="footer" data-theme="b" data-position="fixed">
+        <h4>Treenipäiväkirja</h4>
+    </div>
+
+    <div data-role="panel" id="panelMenu" data-display="overlay" data-theme="a">
+        <ul data-role="listview">
+            <li><a href="#etusivu" class="ui-btn">Etusivu</a></li>
+            <li><a href="#luoUusi" class="ui-btn">Luo uusi harjoitus</a></li>
+            <li><a href="#muokkaa" class="ui-btn">Tarkastele treeniohjelmaa</a></li>
+            <li><a href="#etsiSali" class="ui-btn">Löydä treenipaikka</a></li>
+        </ul>
+    </div>
+
+    <div data-role="page" id="etusivu" data-title="Etusivu">
+
+        <div role="main" class="ui-content ui-body-a">
+
+         <div id="contentbox">
+
+		<h3>Harjoitustyö - Treenipäiväkirja</h3>
+		<table>
+		<tr><td>Marko Tallgren
+		<tr><td>a1600545
+		</table>
+		
+		<h3>Toiminta</h3>
+		<table>
+			<tr><td>Sovelluksen on tarkoitus toimia treenipäiväkirjana, jossa voi luoda ja ylläpitää itselleen treeniohjelmaa.
+			<tr><td>Uusi harjoitus luodaan formilla, jossa on kentät nimelle, kuvaukselle, toistoille ja ajalle.
+			<tr><td>Harjoitukset tallentuvat listaan, jonka voi poistaa kokonaan.
+            <tr><td>Lähiseudun treenipaikat löytyvät automaattisesti havaitun sijainnin mukaan noin 10km etäisyydeltä.
+		</table>
+            </div>
+                
+        <h3 id="saaOtsikko">Helsinki</h3>
+        <p id="saaVastaus"></p>
+            
+        </div>
+
+    </div>
+    <!-- /content -->
+
+    </div>
+    <!-- /page -->
+
+    <div data-role="page" id="luoUusi" data-title="Luo uusi harjoitus">
+
+        <div role="main" class="ui-content ui-body-a">
+            <form action="#" method="post" id="lisaaHarjoitusLomake">
+                <div class="ui-field-contain">
+                    <label for="nimi">Nimi</label>
+                    <input type="text" id="nimi" name="nimi">
+                </div>
+
+                <div class="ui-field-contain">
+                    <label for="toistot">Toistot</label>
+                    <input type="text" id="toistot" name="toistot">
+                </div>
+
+                <div class="ui-field-contain">
+                    <label for="aika">Aika</label>
+                    <input type="text" id="aika" name="aika">
+                </div>
+
+                <div class="ui-field-contain">
+                    <label for="kuvaus">Kuvaus</label>
+                    <textarea id="kuvaus" name="kuvaus"></textarea>
+                </div>
+
+                <button type="button" class="ui-btn ui-corner-all ui-btn-inline" id="lisaa" name="lisaa">Lisää</button>
+                <a href="#" class="ui-btn ui-corner-all ui-btn-a ui-btn-icon-left ui-icon-delete ui-btn-inline" id="tyhjenna" name="tyhjenna">Tyhjennä</a>
+            </form>
+
+        </div>
+        <!-- /content -->
+
+    </div>
+    <!-- /page -->
+
+    <div data-role="page" id="muokkaa" data-title="Tarkastele treeniohjelmaa">
+
+        <div role="main" class="ui-content ui-body-a">
+
+            <p id="data"></p>
+            <button type="button" class="ui-btn ui-corner-all ui-btn-inline" id="poista" name="poista">Poista</button>
+
+        </div>
+        <!-- /content -->
+
+    </div>
+    <!-- /page -->
+
+    <div data-role="page" id="etsiSali" data-title="Löydä treenipaikka">
+
+        <div role="main" class="ui-content ui-body-a">
+
+            <div id="map"></div>
+
+        </div>
+        <!-- /content -->
+
+    </div>
+    <!-- /page -->
+
+    <!--
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    -->
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwBFg4ecq5futJkAedPMO3jY-s9FGuNDA&libraries=places&callback=initMap" async defer></script>
+    <script type="text/javascript">
+        var map, infoWindow;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: 60.2013725,
+                    lng: 24.9340407
+                },
+                zoom: 15
+            });
+
+            infoWindow = new google.maps.InfoWindow;
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    infoWindow.setPosition(pos);
+                    map.setCenter(pos);
+
+                    var service = new google.maps.places.PlacesService(map);
+
+                    service.nearbySearch({
+                        location: pos,
+                        radius: 10000,
+                        type: ['gym']
+                    }, callback);
+
+                }, function () {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                });
+            } else {
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+
+            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(browserHasGeolocation ?
+                    'Error: The Geolocation service failed.' :
+                    'Error: Your browser doesn\'t support geolocation.');
+                infoWindow.open(map);
+            }
+
+
+        }
+
+        function callback(results, status) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                for (var i = 0; i < results.length; i++) {
+                    createMarker(results[i]);
+                }
+            }
+        }
+
+        function createMarker(place) {
+            var placeLoc = place.geometry.location;
+            var marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infoWindow.setContent(place.name + '<br>' + place.vicinity);
+                infoWindow.open(map, this);
+            });
+        }
+
+        $(document).one("pagebeforecreate", function () {
+
+            $("[data-role='header']").toolbar().enhanceWithin();
+            $("[data-role='footer']").toolbar();
+
+            $("#popupMenu").popup().enhanceWithin();
+            $("#panelMenu").panel().enhanceWithin();
+        })
+
+        $(document).one("pagecreate", "#etusivu", function () {
+            // haeSisalto();
+        })
+
+        /*
+        $(document).one("pagecreate", "#luoUusi", function () {
+            $("#paiva").val(tanaan());
+            $("#paiva").datebox({
+                mode: "calbox",
+                useFocus: true,
+                beforeToday: true,
+                overrideCalStartDay: 1,
+                usePlaceholder: "Tapahtumapäivä"
+            })
+
+        })
+        */
+
+        $(document).on("pagecontainershow", function (event, data) {
+            $(".ui-content").height(getRealContentHeight());
+            if (data.toPage[0].id == "etsiSali") {
+                initMap();
+            } else if (data.toPage[0].id == "etusivu") {
+                haeSaa(60.17, 24.94);
+            }
+        })
+
+        $(window).on("resize orientationchange", function () {
+            $(".ui-content").height(getRealContentHeight());
+        })
+
+        function getRealContentHeight() {
+            var activePage = $.mobile.pageContainer.pagecontainer("getActivePage"),
+                screen = $.mobile.getScreenHeight(),
+                header = $(".ui-header").hasClass("ui-header-fixed") ? $(".ui-header").outerHeight() - 1 : $(".ui-header").outerHeight(),
+                footer = $(".ui-footer").hasClass("ui-footer-fixed") ? $(".ui-footer").outerHeight() - 1 : $(".ui-footer").outerHeight(),
+                contentMargins = $(".ui-content", activePage).outerHeight() - $(".ui-content", activePage).height();
+
+            var contentHeight = screen - header - footer - contentMargins;
+
+            return contentHeight;
+        }
+
+        $(document).on("pagecontainerchange", function () {
+            navi();
+        })
+
+        /* $(document).on("swipeleft", ".ui-page", function(event) { 
+	
+			if(event.handled !== true) { // Annetaan tapahtua vain kerran
+				var nextpage = $(this).next("div[data-role='page']");
+				
+				if (nextpage.length == 0) {
+					nextpage = $("div[data-role='page']:first");
+				}
+		
+				$.mobile.pageContainer.pagecontainer ("change", nextpage);
+				event.handled = true;
+				navi();
+			}
+			return false;
+		})
+		
+	    $(document).on("swiperight", ".ui-page", function(event) { 
+		
+			if(event.handled !== true) {
+				var prevpage = $(this).prev("div[data-role='page']");
+
+				if (prevpage.length == 0) {
+					prevpage = $("div[data-role='page']:last");
+				}
+				
+				$.mobile.pageContainer.pagecontainer ("change", prevpage);
+				event.handled = true;
+				navi();
+			}
+			return false;
+		}) */
+
+        /*
+        		$(document).on("swiperight", ".ui-page", function(event) {
+        			$( "#panelMenu" ).panel( "open" );
+        		})
+        */
+
+        function navi() {
+            // attribuutti data-title
+            var current = $(".ui-page-active").jqmData("title"); // data-title
+
+            $("[data-role='header'] h1").text(current);
+
+            $("[data-role='navbar'] a.ui-btn-active").removeClass("ui-btn-active");
+
+            $("[data-role='navbar'] a").each(function () {
+                if ($(this).text() === current) {
+                    $(this).addClass("ui-btn-active");
+                }
+            })
+        }
+
+        var validator = $("#lisaaHarjoitusLomake").validate({
+                errorClass: "virhe",
+                errorElement: "div",
+                rules: {
+                    nimi: {
+                        required: true,
+                        maxlength: 30,
+                    },
+                    toistot: {
+                        required: true,
+                        number: true,
+                    },
+                    aika: {
+                        required: true,
+                        number: true,
+                    },
+                    kuvaus: {
+                        required: true,
+                        maxlength: 100,
+                    },
+                },
+                messages: {
+                    nimi: {
+                        required: "Syötä nimi",
+                        maxlength: jQuery.validator.format("Enintään {0} merkkiä"),
+                    },
+                    toistot: {
+                        required: "Syötä toistot",
+                        number: "Vain numeroita",
+                        
+                    },
+                    aika: {
+                        required: "Syötä aika",
+                        number: "Vain numeroita",
+                    },
+                    kuvaus: {
+                        required: "Syötä kuvaus",
+                        maxlength: jQuery.validator.format("Enintään {0} merkkiä"),
+                    },
+                },
+                highlight: function (element) {
+                    $(element).addClass("kenttaVirhe");
+
+                },
+                unhighlight: function (element) {
+                    $(element).removeClass("kenttaVirhe");
+                },
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                },
+            }) // validator
+
+        function tyhjennaLomake() {
+            $("#lisaaHarjoitusLomake input, #lisaaHarjoitusLomake textarea").each(function () {
+                $(this).val("");
+            })
+            validator.resetForm();
+        }
+
+        $("#tyhjenna").on("tap", function () {
+            tyhjennaLomake();
+        })
+
+        $("#lisaa").on("tap", function () {
+            if ($("#lisaaHarjoitusLomake").valid()) {
+                // alert("ok");
+            }
+        })
+
+        $('#lisaa').click(function () {
+            if ($("#lisaaHarjoitusLomake").valid()) {
+                var todo = {
+                    nimi: $('#nimi').val(),
+                    toistot: $('#toistot').val(),
+                    aika: $('#aika').val(),
+                    kuvaus: $('#kuvaus').val(),
+                };
+                var request = indexedDB.open('harjoitukset', 1);
+
+                request.onupgradeneeded = (event) => {
+                    var db = event.target.result;
+
+                    var objStore = db.createObjectStore("names", {
+                        autoIncrement: true
+                    });
+                };
+
+                request.onsuccess = (event) => {
+                    var db = event.target.result;
+                    var transaction = db.transaction(["names"], "readwrite");
+                    var objectStore = transaction.objectStore("names");
+                    objectStore.add(todo);
+
+                    objectStore.getAll().onsuccess = function (event) {
+                        var rows = event.target.result.length;
+                        var htmlData = "<table id='datalist'>";
+                        $('#datalist').empty();
+                        for (var i = 0; i < rows; i++) {
+                            htmlData += "<tr><td>Nimi: " + event.target.result[i].nimi + "<tr><td>Toistot: " + event.target.result[i].toistot + "<tr><td>Aika: " + event.target.result[i].aika + "<tr><td>Kuvaus: " + event.target.result[i].kuvaus + "<p></p>";
+                        }
+                        htmlData += "</table>";
+                        $('#data').html(htmlData);
+
+                    };
+                    db.close();
+                };
+            }
+        });
+
+        $('#poista').click(function () {
+            var request = indexedDB.open('harjoitukset', 1);
+
+            request.onsuccess = (event) => {
+                var db = event.target.result;
+                var transaction = db.transaction(["names"], "readwrite");
+                var objectStore = transaction.objectStore("names");
+                objectStore.clear();
+                db.close();
+            };
+
+            $('#data').html('');
+        });
+        
+        function haeSaa(lat, lon) {
+			$.ajax({
+                url: "http://api.openweathermap.org/data/2.5/weather?lang=fi&lat=" + lat + "&lon=" + lon + "&units=metric&APPID=32f1264bba3945837fa37cc1c29b4db1",
+                dataType: "json",
+                timeout: 5000
+            })
+			.done(function(data) {
+				var vastaus = "";
+                vastaus = "<h3 style='margin-bottom:0cm'><img align='middle' src='http://api.openweathermap.org/img/w/" + data.weather[0].icon +"' alt='sääkuva'> " + data.main.temp.toFixed(0) + "</h3>"
+                vastaus =  vastaus + "<p>" + data.weather[0].description;
+                vastaus = vastaus + "<br>Tuuli: " + data.wind.speed.toFixed(0);
+                vastaus = vastaus + "<br>Pilvisyys: " + data.clouds.all + "%</p>";
+                $("#saaVastaus").html(vastaus);
+            })
+			.fail(function() {
+ 			    
+			})
+		}
+    </script>
+
+</body>
+
+</html>
